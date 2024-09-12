@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import "./styles/App.css";
 import PostList from "./components/PostList";
-import MyButton from "./components/UI/Button/MyButton";
-import MyInput from "./components/UI/Input/MyInput";
+import PostForm from "./components/PostForm";
+import MySelect from "./components/UI/Select/MySelect";
+
 
 function App() {
   const [posts, setPosts] = useState([
@@ -17,36 +18,41 @@ function App() {
     { id: 3, title: "SQL", body: "SQL - Язык структурированных запросов" },
   ]);
 
-  const [post, setPost] = useState({title: '', body: ''});
+  const [selectedSort, setSelectedSort] = useState('');
 
-
-  const addNewPost = (e) => {
-    e.preventDefault();
-    setPosts([...posts, {...post, id: Date.now()}] );
-    setPost({title: '', body: ''});
+  const createPost = (newPost) => {
+    setPosts([...posts, newPost])
   }
-   
+
+  const deletePost = (post) => {
+    setPosts(posts.filter(p => p.id !== post.id))
+  }
+
+  const sortPosts = (sort) => {
+    setSelectedSort(sort);
+    setPosts([...posts].sort((a, b) => a[sort].localeCompare(b[sort])));
+  }
+
   return (
     <div className="App">
-      <form>
-        {/* {Управляемый компонент } */}
-        <MyInput 
-          type="text" 
-          placeholder="Название поста" 
-          value={ post.title } 
-          onChange={e => setPost({...post, title: e.target.value})}
-        />
-        {/* Неуправляемый/неконтролируемый компонент (была раньше) */}
-        <MyInput 
-          type="text" 
-          placeholder="Описание поста"
-          value={ post.body } 
-          onChange={e => setPost({...post, body: e.target.value})}
-
-        />
-        <MyButton onClick={ addNewPost }>Создать пост</MyButton>
-      </form>
-      <PostList posts={posts} title="Посты для JS"/>
+      <PostForm create={createPost}/>
+      <hr style={{margin: "15px 0"}}/>
+      <MySelect
+        value={selectedSort}
+        onChange={sortPosts}
+        defaultValue="Сортировка"
+        options={[
+          {value: "title", name: "По названию"},
+          {value: "body", name: "По описанию"}
+        ]}
+        
+      />
+      {/* Условная отрисовка */}
+      {posts.length 
+        ? <PostList posts={posts} title="Посты для JS" deletePost={deletePost}/> 
+        : <h1 style={{textAlign: "center"}}>Посты не найдены</h1>
+      }
+     
       <PostList posts={posts2} title="Посты для Python"/>
     </div>
   );
