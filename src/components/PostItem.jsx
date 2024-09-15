@@ -1,5 +1,6 @@
 import React from "react";
 import MyButton from "./UI/Button/MyButton";
+import classes from "./PostItem.module.css";
 
 function PostItem(props) {
 
@@ -13,7 +14,9 @@ function PostItem(props) {
         <div>{props.post.body}</div>
       </div>
       <div className="post_btns">
-        <MyButton onClick={ () => props.deletePost(props.post)}>Удалить</MyButton>
+        <MyButton 
+          className={classes.postRemoveBtn}
+          onClick={ () => props.deletePost(props.post)}>Удалить</MyButton>
       </div>
     </div>
   );
