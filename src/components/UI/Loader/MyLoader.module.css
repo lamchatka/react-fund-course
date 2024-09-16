@@ -1,0 +1,11 @@
+.myLoader {
+    margin: 20px auto;
+    padding: 5px 15px;
+    width: 286px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    font-size: 22px;
+    color: #306cce;
+    font-weight: 500;
+}
